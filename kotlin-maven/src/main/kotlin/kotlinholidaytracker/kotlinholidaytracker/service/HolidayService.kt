@@ -52,11 +52,11 @@ class HolidayService(private val holidayRepository: HolidayRepository) {
     val output: MutableList<Holiday> = mutableListOf()
     val allHolidays = holidayRepository.findAll()
 
-    val df: DateFormat = SimpleDateFormat("yyyy-MM-dd")
-    val startDateMilli = df.parse(startDate).time
-    val endDateMilli = df.parse(endDate).time
-
     try {
+      val df: DateFormat = SimpleDateFormat("yyyy-MM-dd")
+      val startDateMilli = df.parse(startDate).time
+      val endDateMilli = df.parse(endDate).time
+
       allHolidays.forEach {
         val currentDateMilli = df.parse(it.date).time
         if (currentDateMilli in startDateMilli until endDateMilli + 1) {
@@ -65,6 +65,7 @@ class HolidayService(private val holidayRepository: HolidayRepository) {
       }
     } catch (e: Exception) {
       println("Exception occurred $e")
+      throw BadRequestException("Wrong date format. Please provide the date of the holiday in the format of YYYY-MM-DD")
     }
 
     return output

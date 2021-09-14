@@ -1,5 +1,6 @@
 package javamaven.javamaven.service;
 
+import javamaven.javamaven.entity.Leave;
 import javamaven.javamaven.entity.User;
 import javamaven.javamaven.exception.BadRequestException;
 import javamaven.javamaven.exception.NotFoundException;
@@ -52,4 +53,17 @@ public class UserService {
         userRepository.save(userById.get());
         return userById.get();
     }
+
+    public boolean doesUserIdExist(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        return user.isPresent();
+    }
+
+    public void addLeave(Long userId, Leave leave) {
+        Optional<User> user = userRepository.findById(userId);
+        // Still should add validation on whether user exist
+        user.get().addLeave(leave);
+        userRepository.save(user.get());
+    }
+
 }

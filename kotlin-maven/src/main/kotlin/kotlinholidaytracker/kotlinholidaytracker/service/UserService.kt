@@ -27,7 +27,7 @@ class UserService (private val userRepository: UserRepository) {
 
   fun userSignIn(email: String, password: String) {
     val userEntry: Optional<User> = userRepository.findUserByEmail(email)
-    if (userEntry.isEmpty) throw NotFoundException("Please check your email and password")
+    if (userEntry.isEmpty) throw BadRequestException("Please check your email and password")
     if (userEntry.get().password != password) throw BadRequestException("Please check your email and password")
   }
 

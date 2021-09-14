@@ -1,5 +1,7 @@
 package javamaven.javamaven.controller;
 
+import javamaven.javamaven.controller.utils.ChangePasswordForm;
+import javamaven.javamaven.controller.utils.SignInForm;
 import javamaven.javamaven.entity.User;
 import javamaven.javamaven.exception.BadRequestException;
 import javamaven.javamaven.service.UserService;
@@ -9,34 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-class SignInForm {
-    private String email;
-    private String password;
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-}
-
-class ChangePasswordForm {
-    private String oldPassword;
-    private String newPassword;
-
-    public String getOldPassword() {
-        return oldPassword;
-    }
-
-    public String getNewPassword() {
-        return newPassword;
-    }
-}
-
 @RestController
-@CrossOrigin(origins = "https://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(path = "api/user")
 public class UserController {
 
@@ -50,6 +26,7 @@ public class UserController {
 
     @GetMapping("/search")
     public User getUser(@RequestParam(required = false) Long id) {
+        System.out.println("my id is" + id);
         if (id == null) throw new BadRequestException("Please enter a id as a query parameter");
         return userService.getUser(id);
     }

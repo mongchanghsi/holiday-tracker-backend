@@ -14,6 +14,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -199,12 +202,61 @@ class HolidayServiceTest {
 
 
     @Test
-    @Disabled
-    void findHolidayInRange() {
+    void canFindHolidayInRange() {
+        String mockStartDate = "2000-01-01";
+        String mockEndDate = "2100-01-01";
+
+        Holiday holiday = new Holiday(mockName, mockDate);
+
+        List<Holiday> holidayList = new ArrayList<>();
+        holidayList.add(holiday);
+
+        given(mockHolidayRepository.findAll())
+                .willReturn(holidayList);
+
+        List<Holiday> outputList = holidayServiceTest.findHolidayInRange(mockStartDate, mockEndDate);
+
+        assertThat(outputList).isEqualTo(holidayList);
+
+        verify(mockHolidayRepository).findAll();
     }
 
     @Test
-    @Disabled
-    void findDatesForAnnualLeaves() {
+    void cannotFindHolidayInRangeDueToWrongDateFormat() {
+        String mockStartDate = "2000-01";
+        String mockEndDate = "2100-01-01";
+
+        Holiday holiday = new Holiday(mockName, mockDate);
+
+        List<Holiday> holidayList = new ArrayList<>();
+        holidayList.add(holiday);
+
+        given(mockHolidayRepository.findAll())
+                .willReturn(holidayList);
+
+        assertThatThrownBy(() -> holidayServiceTest.findHolidayInRange(mockStartDate, mockEndDate))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessageContaining("Wrong date format. Please provide the date of the holiday in the format of YYYY-MM-DD");
+
+        verify(mockHolidayRepository).findAll();
+    }
+
+    @Test
+    void canFindDatesForAnnualLeaves() {
+        mockDate = "2020-01-07";
+        String alCorrespondToMockDate = "2020-01-06";
+
+        Holiday holiday = new Holiday(mockName, mockDate);
+        List<Holiday> holidayList = new ArrayList<>();
+        holidayList.add(holiday);
+
+        given(mockHolidayRepository.findAll())
+                .willReturn(holidayList);
+
+        List<Holiday> outputList = holidayServiceTest.findDatesForAnnualLeaves();
+
+        assertThat(outputList.get(0).getDate()).isEqualTo(alCorrespondToMockDate);
+
+        verify(mockHolidayRepository).findAll();
     }
 }

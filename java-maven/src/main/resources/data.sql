@@ -24,3 +24,18 @@ INSERT INTO holiday (name, date) VALUES
     ('New Year', '2020-01-01'),
     ('Chinese New Year', '2020-02-02'),
     ('Christmas', '2020-12-25');
+
+
+DROP TABLE IF EXISTS Leave;
+
+CREATE TABLE Leave (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    date VARCHAR(250) NOT NULL
+);
+
+DROP TABLE IF EXISTS user_annualleaves;
+
+CREATE TABLE user_annualleaves (
+    user_id INT NOT NULL,
+    leave_id INT NOT NULL
+);

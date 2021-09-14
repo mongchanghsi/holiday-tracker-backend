@@ -1,5 +1,6 @@
 package javamaven.javamaven.controller;
 
+import javamaven.javamaven.controller.utils.RangeInput;
 import javamaven.javamaven.entity.Holiday;
 import javamaven.javamaven.exception.BadRequestException;
 import javamaven.javamaven.service.HolidayService;
@@ -11,19 +12,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
-
-class RangeInput {
-    private String startDate;
-    private String endDate;
-
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-}
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")

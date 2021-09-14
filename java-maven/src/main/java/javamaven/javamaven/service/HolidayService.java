@@ -71,7 +71,8 @@ public class HolidayService {
     }
 
     public List<Holiday> findHolidayInRange(String startDate, String endDate) {
-        List<Holiday> output = Collections.emptyList();
+//        List<Holiday> output = Collections.emptyList();
+        List<Holiday> output = new ArrayList<>();
         List<Holiday> allHolidays = holidayRepository.findAll();
 
         try {
@@ -81,7 +82,7 @@ public class HolidayService {
 
             for (Holiday holiday : allHolidays) {
                 Long currentDateMilli = df.parse(holiday.getDate()).getTime();
-                if (currentDateMilli > startDateMilli && currentDateMilli < endDateMilli) {
+                if (currentDateMilli > startDateMilli && currentDateMilli <= endDateMilli) {
                     output.add(holiday);
                 }
             }
@@ -94,7 +95,8 @@ public class HolidayService {
 
     public List<Holiday> findDatesForAnnualLeaves() {
         // Assuming to take only 1 extra AL
-        List<Holiday> output = Collections.emptyList();
+//        List<Holiday> output = Collections.emptyList();
+        List<Holiday> output = new ArrayList<>();
         List<Holiday> allHolidays = holidayRepository.findAll();
 
         try {
@@ -106,16 +108,18 @@ public class HolidayService {
                 String day = df2.format(_date);
 
                 Long dayToALMilli = _date.getTime();
-                if (day == "Tuesday") {
+                if (day.equals("Tuesday")) {
                     dayToALMilli -= 86400000;
                 }
 
-                if (day == "Thursday") {
+                if (day.equals("Thursday")) {
                     dayToALMilli += 86400000;
                 }
 
-                if (day == "Tuesday" || day == "Thursday") {
-                    String dayToAl = df2.format(new Date(dayToALMilli));
+                if (day.equals("Tuesday") || day.equals("Thursday")) {
+                    String dayToAl = df.format(new Date(dayToALMilli));
+                    Holiday alEntry = new Holiday("Annual Leave", dayToAl);
+                    output.add(alEntry);
                 }
             }
         } catch (ParseException e) {
